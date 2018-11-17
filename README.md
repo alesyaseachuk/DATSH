@@ -1,3 +1,503 @@
 # DATSH
 Hello World!
 
+-- -----------------------------------------------------
+-- Schema belkniga
+-- -----------------------------------------------------
+DROP SCHEMA IF EXISTS belkniga ;
+
+-- -----------------------------------------------------
+-- Schema belkniga
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS belkniga DEFAULT CHARACTER SET utf8 ;
+USE belkniga ;
+
+-
+-- -----------------------------------------------------
+-- Table belkniga.Cars
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS belkniga.Cars ;
+
+CREATE TABLE IF NOT EXISTS belkniga.Cars (
+  id INT NOT NULL AUTO_INCREMENT,
+  Brand MEDIUMTEXT NOT NULL,
+  Load_capacity DOUBLE NOT NULL,
+  PRIMARY KEY (id))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table belkniga.Storages
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS belkniga.Storages ;
+
+CREATE TABLE IF NOT EXISTS belkniga.Storages (
+  id INT NOT NULL AUTO_INCREMENT,
+  Name MEDIUMTEXT NOT NULL,
+  PRIMARY KEY (id))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table belkniga.Logistics
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS belkniga.Logistics ;
+
+CREATE TABLE IF NOT EXISTS belkniga.Logistics (
+  id INT NOT NULL AUTO_INCREMENT,
+  Name MEDIUMTEXT NOT NULL,
+  Cars_id INT NOT NULL,
+  Storages_id INT NOT NULL,
+  PRIMARY KEY (id),
+  INDEX Cars_idx (Cars_id ASC),
+  INDEX Storages _idx (Storages_id ASC),
+  CONSTRAINT Cars
+    FOREIGN KEY (Cars_id)
+    REFERENCES belkniga.Cars (id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT Storages 
+    FOREIGN KEY (Storages_id)
+    REFERENCES belkniga.Storages (id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table belkniga.Stationery
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS belkniga.Stationery ;
+
+CREATE TABLE IF NOT EXISTS belkniga.Stationery (
+  id INT NOT NULL,
+  Brand MEDIUMTEXT NOT NULL,
+  Price_stationary DECIMAL NOT NULL,
+  PRIMARY KEY (id))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table belkniga.Books
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS belkniga.Books ;
+
+CREATE TABLE IF NOT EXISTS belkniga.Books (
+  id INT NOT NULL AUTO_INCREMENT,
+  Name MEDIUMTEXT NOT NULL,
+  Author MEDIUMTEXT NOT NULL,
+  Price_book DECIMAL NOT NULL,
+  PRIMARY KEY (id))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table belkniga.Products
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS belkniga.Products ;
+
+CREATE TABLE IF NOT EXISTS belkniga.Products (
+  ID INT NOT NULL,
+  Type_products MEDIUMTEXT NOT NULL,
+  Cost MEDIUMTEXT NOT NULL,
+  Stationary_id INT NOT NULL,
+  Books_id INT NOT NULL,
+  PRIMARY KEY (ID),
+  INDEX Station_idx (Stationary_id ASC),
+  INDEX Books_idx (Books_id ASC),
+  CONSTRAINT Station
+    FOREIGN KEY (Stationary_id)
+    REFERENCES belkniga.Stationery (ID)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT Books
+    FOREIGN KEY (Books_id)
+    REFERENCES belkniga.Books (ID)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table belkniga.Publishers
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS belkniga.Publishers ;
+
+CREATE TABLE IF NOT EXISTS belkniga.Publishers (
+  ID INT NOT NULL AUTO_INCREMENT,
+  Name MEDIUMTEXT NOT NULL,
+  Type MEDIUMTEXT NOT NULL,
+  Size MEDIUMTEXT NOT NULL,
+  Adress_publishers MEDIUMTEXT NOT NULL,
+  Products_id INT NOT NULL,
+  PRIMARY KEY (ID),
+  INDEX fk_Publishers_products_idx (Products_id ASC),
+  CONSTRAINT fk_Publishers_products
+    FOREIGN KEY (Products_id)
+    REFERENCES belkniga.Products (ID)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table belkniga.Cities
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS belkniga.Cities ;
+
+CREATE TABLE IF NOT EXISTS belkniga.Cities (
+  ID INT NOT NULL AUTO_INCREMENT,
+  Name MEDIUMTEXT NOT NULL,
+  PRIMARY KEY (ID))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table belkniga.Addresses
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS belkniga.Addresses ;
+
+CREATE TABLE IF NOT EXISTS belkniga.Addresses (
+  ID INT NOT NULL AUTO_INCREMENT,
+  Address MEDIUMTEXT NOT NULL,
+  PRIMARY KEY (ID))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table belkniga.Regions
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS belkniga.Regions ;
+
+CREATE TABLE IF NOT EXISTS belkniga.Regions (
+  ID INT NOT NULL AUTO_INCREMENT,
+  Region_name MEDIUMTEXT NOT NULL,
+  PRIMARY KEY (ID))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table belkniga.Shops
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS belkniga.Shops ;
+
+CREATE TABLE IF NOT EXISTS belkniga.Shops (
+  ID INT NOT NULL AUTO_INCREMENT,
+  Name MEDIUMTEXT NOT NULL,
+  Cities_id INT NOT NULL,
+  Addresses_id INT NOT NULL,
+  Regions_id INT NOT NULL,
+  PRIMARY KEY (ID),
+  INDEX Cities_idx (Cities_id ASC),
+  INDEX fk_Shops_Addresses1_idx (Addresses_id ASC),
+  INDEX fk_Shops_Regions1_idx (Regions_id ASC),
+  CONSTRAINT Cities
+    FOREIGN KEY (Cities_id)
+    REFERENCES belkniga.Cities (ID)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_Shops_Addresses1
+    FOREIGN KEY (Addresses_id)
+    REFERENCES belkniga.Addresses (ID)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_Shops_Regions1
+    FOREIGN KEY (Regions_id)
+    REFERENCES belkniga.Regions (ID)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table belkniga.Regional_Headquarter
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS belkniga.Regional_Headquarter ;
+
+CREATE TABLE IF NOT EXISTS belkniga.Regional_Headquarter (
+  ID INT NOT NULL AUTO_INCREMENT,
+  Name MEDIUMTEXT NOT NULL,
+  Address MEDIUMTEXT NOT NULL,
+  City MEDIUMTEXT NOT NULL,
+  Shop_id INT NOT NULL,
+  PRIMARY KEY (ID),
+  INDEX Shops_idx (Shop_id ASC),
+  CONSTRAINT Shops
+    FOREIGN KEY (Shop_id)
+    REFERENCES belkniga.Shops (ID)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table belkniga.Exhibitions
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS belkniga.Exhibitions ;
+
+CREATE TABLE IF NOT EXISTS belkniga.Exhibitions (
+  ID INT NOT NULL AUTO_INCREMENT,
+  Purpose MEDIUMTEXT NOT NULL,
+  Date DATE NOT NULL,
+  Place MEDIUMTEXT NOT NULL,
+  Capacity INT NOT NULL,
+  PRIMARY KEY (ID))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table belkniga.Marketing branch
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS belkniga.Marketing branch ;
+
+CREATE TABLE IF NOT EXISTS belkniga.Marketing branch (
+  ID INT NOT NULL AUTO_INCREMENT,
+  Head_market MEDIUMTEXT NOT NULL,
+  Representatives_market MEDIUMTEXT NOT NULL,
+  Exhib_id INT NOT NULL,
+  PRIMARY KEY (ID),
+  INDEX Exhib_idx (Exhib_id ASC),
+  CONSTRAINT Exhib
+    FOREIGN KEY (Exhib_id)
+    REFERENCES belkniga.Exhibitions (ID)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table belkniga.Users
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS belkniga.Users ;
+
+CREATE TABLE IF NOT EXISTS belkniga.Users (
+  ID INT NOT NULL AUTO_INCREMENT,
+  Name MEDIUMTEXT NOT NULL,
+  Age MEDIUMTEXT NOT NULL,
+  Address MEDIUMTEXT NOT NULL,
+  PRIMARY KEY (ID))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table belkniga.Staff
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS belkniga.Staff ;
+
+CREATE TABLE IF NOT EXISTS belkniga.Staff (
+  ID INT NOT NULL AUTO_INCREMENT,
+  Name MEDIUMTEXT NOT NULL,
+  Type MEDIUMTEXT NOT NULL,
+  Access_level MEDIUMTEXT NOT NULL,
+  Users_id INT NOT NULL,
+  PRIMARY KEY (ID),
+  INDEX Users_idx (Users_id ASC),
+  CONSTRAINT Users
+    FOREIGN KEY (Users_id)
+    REFERENCES belkniga.Users (ID)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table belkniga.Producers
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS belkniga.Producers ;
+
+CREATE TABLE IF NOT EXISTS belkniga.Producers (
+  ID INT NOT NULL AUTO_INCREMENT,
+  Name MEDIUMTEXT NOT NULL,
+  Address MEDIUMTEXT NOT NULL,
+  PRIMARY KEY (ID))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table belkniga.Sales
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS belkniga.Sales ;
+
+CREATE TABLE IF NOT EXISTS belkniga.Sales (
+  ID INT NOT NULL AUTO_INCREMENT,
+  Head_sales MEDIUMTEXT NOT NULL,
+  Representative_sales MEDIUMTEXT NOT NULL,
+  Capacity_sales MEDIUMTEXT NOT NULL,
+  Prods_id INT NOT NULL,
+  PRIMARY KEY (ID),
+  INDEX Prods_idx (Prods_id ASC),
+  CONSTRAINT Prods
+    FOREIGN KEY (Prods_id)
+    REFERENCES belkniga.Producers (ID)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table belkniga.Headquarter
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS belkniga.Headquarter ;
+
+CREATE TABLE IF NOT EXISTS belkniga.Headquarter (
+  ID INT NOT NULL AUTO_INCREMENT,
+  Heads_staff MEDIUMTEXT NOT NULL,
+  Representatives_staff MEDIUMTEXT NOT NULL,
+  Contacts_staff TINYINT NOT NULL,
+  Marketing_id INT NOT NULL,
+  Logistics_id INT NOT NULL,
+  Publishers_id INT NOT NULL,
+  Regions_id INT NOT NULL,
+  Staff_id INT NOT NULL,
+  Sales_id INT NOT NULL,
+  PRIMARY KEY (ID),
+  INDEX fk_Headquarter_Logistics1_idx (Logistics_id ASC),
+  INDEX fk_Headquarter_Publishers_idx (Publishers_id ASC),
+  INDEX fk_Headquarter_Regions_idx (Regions_id ASC),
+  INDEX fk_Headquarter_Marketing_idx (Marketing_id ASC),
+  INDEX fk_Headquarter_Staff_idx (Staff_id ASC),
+  INDEX Sales_idx (Sales_id ASC),
+  CONSTRAINT fk_Headquarter_Logistics1
+    FOREIGN KEY (Logistics_id)
+    REFERENCES belkniga.Logistics (ID)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_Headquarter_Publishers
+    FOREIGN KEY (Publishers_id)
+    REFERENCES belkniga.Publishers (ID)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_Headquarter_Regions
+    FOREIGN KEY (Regions_id)
+    REFERENCES belkniga.Regional_Headquarter (ID)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_Headquarter_Marketing
+    FOREIGN KEY (Marketing_id)
+    REFERENCES belkniga.Marketing branch (ID)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_Headquarter_Staff
+    FOREIGN KEY (Staff_id)
+    REFERENCES belkniga.Staff (ID)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT Sales
+    FOREIGN KEY (Sales_id)
+    REFERENCES belkniga.Sales (ID)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+
+
+
+
+-- -----------------------------------------------------
+-- Data for table belkniga.Cars
+-- -----------------------------------------------------
+START TRANSACTION;
+USE belkniga;
+INSERT INTO belkniga.Cars (ID, Brand, Load_capacity) VALUES (1, 'Ford', 500);
+INSERT INTO belkniga.Cars (ID, Brand, Load_capacity) VALUES (2, 'Iveco', 700);
+INSERT INTO belkniga.Cars (ID, Brand, Load_capacity) VALUES (3, 'Toyota', 1000);
+INSERT INTO belkniga.Cars (ID, Brand, Load_capacity) VALUES (4, 'VAZ', 1200);
+INSERT INTO belkniga.Cars (ID, Brand, Load_capacity) VALUES (5, 'Jilly', 1300);
+INSERT INTO belkniga.Cars (ID, Brand, Load_capacity) VALUES (6, 'Kamaz', 1600);
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table belkniga.Storages
+-- -----------------------------------------------------
+START TRANSACTION;
+USE belkniga;
+INSERT INTO belkniga.Storages (ID, Name) VALUES (1, 'Eros Proin Foundation');
+INSERT INTO belkniga.Storages (ID, Name) VALUES (2, 'Blandit Congue Associates');
+INSERT INTO belkniga.Storages (ID, Name) VALUES (3, 'Ut Mi Industries');
+INSERT INTO belkniga.Storages (ID, Name) VALUES (4, 'Lobortis Ultrices Industries');
+INSERT INTO belkniga.Storages (ID, Name) VALUES (5, 'Eros Corporation');
+INSERT INTO belkniga.Storages (ID, Name) VALUES (6, 'Pretium Incorporated');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table belkniga.Logistics
+-- -----------------------------------------------------
+START TRANSACTION;
+USE belkniga;
+INSERT INTO belkniga.Logistics (id, Name, Cars_id, Storages_id) VALUES (1, 'Ikea', 1, DEFAULT);
+INSERT INTO belkniga.Logistics (id, Name, Cars_id, Storages_id) VALUES (2, 'Jacobs', 3, DEFAULT);
+INSERT INTO belkniga.Logistics (id, Name, Cars_id, Storages_id) VALUES (3, 'Tete', 3, DEFAULT);
+INSERT INTO belkniga.Logistics (id, Name, Cars_id, Storages_id) VALUES (4, 'Tom' 2, DEFAULT);
+INSERT INTO belkniga.Logistics (id, Name, Cars_id, Storages_id) VALUES (5, 'Bom' 5, DEFAULT);
+INSERT INTO belkniga.Logistics (id, Name, Cars_id, Storages_id) VALUES (6, 'Biba'6, DEFAULT);
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table belkniga.Cities
+-- -----------------------------------------------------
+START TRANSACTION;
+USE belkniga;
+INSERT INTO belkniga.Cities (ID, Name) VALUES (1, 'Terragnolo');
+INSERT INTO belkniga.Cities (ID, Name) VALUES (2, 'Sulzano');
+INSERT INTO belkniga.Cities (ID, Name) VALUES (3, 'Vejano');
+INSERT INTO belkniga.Cities (ID, Name) VALUES (4, 'Manfredonia');
+INSERT INTO belkniga.Cities (ID, Name) VALUES (5, 'Caccamo');
+INSERT INTO belkniga.Cities (ID, Name) VALUES (6, 'Villata');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table belkniga.Addresses
+-- -----------------------------------------------------
+START TRANSACTION;
+USE belkniga;
+INSERT INTO belkniga.Addresses (ID, Address) VALUES (1, 'P.O. Box 189, 5384 Eros St.');
+INSERT INTO belkniga.Addresses (ID, Address) VALUES (2, 'Ap #507-6445 Elit. Avenue');
+INSERT INTO belkniga.Addresses (ID, Address) VALUES (3, 'Ap #858-1773 Diam St.');
+INSERT INTO belkniga.Addresses (ID, Address) VALUES (4, 'Ap #962-9676 Velit. Ave');
+INSERT INTO belkniga.Addresses (ID, Address) VALUES (5, 'P.O. Box 689, 6913 Vel, Rd.');
+INSERT INTO belkniga.Addresses (ID, Address) VALUES (6, 'P.O. Box 241, 2265 Rhoncus Road');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table belkniga.Regions
+-- -----------------------------------------------------
+START TRANSACTION;
+USE belkniga;
+INSERT INTO belkniga.Regions (ID, Region_name) VALUES (1, 'Sicilia');
+INSERT INTO belkniga.Regions (ID, Region_name) VALUES (2, 'Lazio');
+INSERT INTO belkniga.Regions (ID, Region_name) VALUES (3, 'Lombardia');
+INSERT INTO belkniga.Regions (ID, Region_name) VALUES (4, 'Campania');
+INSERT INTO belkniga.Regions (ID, Region_name) VALUES (5, 'Marche');
+INSERT INTO belkniga.Regions (ID, Region_name) VALUES (6, 'Trentino-Alto Adige');
+INSERT INTO belkniga.Regions (ID, Region_name) VALUES (3, 'Campania');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table belkniga.Shops
+-- -----------------------------------------------------
+START TRANSACTION;
+USE belkniga;
+INSERT INTO belkniga.Shops (ID, Name, Cities_id, Addresses_id, Regions_id) VALUES (1, 'Vance', 1, 2, 3);
+INSERT INTO belkniga.Shops (ID, Name, Cities_id, Addresses_id, Regions_id) VALUES (2, 'Boris', 3, 3, 2);
+INSERT INTO belkniga.Shops (ID, Name, Cities_id, Addresses_id, Regions_id) VALUES (3, 'Lawrence', 5, 3, 4);
+INSERT INTO belkniga.Shops (ID, Name, Cities_id, Addresses_id, Regions_id) VALUES (4, 'Brittany', 1, 1, 5);
+INSERT INTO belkniga.Shops (ID, Name, Cities_id, Addresses_id, Regions_id) VALUES (5, 'Reed', 3, 5, 6);
+INSERT INTO belkniga.Shops (ID, Name, Cities_id, Addresses_id, Regions_id) VALUES (6, 'Linda', 4, 4, 1);
+
+COMMIT;
+
+
+
+
