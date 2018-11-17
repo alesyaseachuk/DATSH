@@ -495,3 +495,27 @@ INSERT INTO belkniga.Shops (ID, Name, Cities_id, Addresses_id, Regions_id) VALUE
 INSERT INTO belkniga.Shops (ID, Name, Cities_id, Addresses_id, Regions_id) VALUES (6, 'Linda', 4, 4, 1);
 
 COMMIT;
+
+INSERT INTO belkniga.Cities (ID, Name) VALUES (7, 'Terracina');
+INSERT INTO belkniga.Logistics (id, Name, Cars_id, Storages_id) VALUES (7, 'Bifa', 6, DEFAULT);
+INSERT INTO belkniga.Storages (ID, Name) VALUES (7, 'British Petroleum');
+INSERT INTO belkniga.Cars (ID, Brand, Load_capacity) VALUES (7, 'BMW', 1000);
+INSERT INTO belkniga.Addresses (ID, Address) VALUES (7, 'Ap #507-6446 Sovietskaya');
+
+UPDATE belkniga.Cars SET Brand='Mercedes' WHERE Load_capacity>700 AND Load_capacity<1200 ;
+UPDATE belkniga.Cities SET Name='Roma' WHERE id<2;
+UPDATE belkniga.Logistics SET Name='British American Tobacco' WHERE Storages_id=2;
+UPDATE belkniga.Addresses SET Address='Ap #507-6333 Sovietskaya' WHERE id=4;
+UPDATE belkniga.Storages SET Name='Lada' WHERE id=5;
+
+DELETE FROM belkniga.Cities WHERE id=5;
+DELETE FROM belkniga.Logistics WHERE Name='Tete';
+DELETE FROM belkniga.Storages WHERE Name='Pretium Incorporated';
+DELETE FROM belkniga.Cars WHERE Load_capacity=1200;
+DELETE FROM belkniga.Addresses WHERE Address='P.O. Box 189, 5384 Eros St.'
+
+SELECT * FROM belkniga.Regions WHERE Region_name='Lombardia';
+SELECT * FROM belkniga.Logistics WHERE Cars_id=1;
+SELECT * FROM belkniga.Cities WHERE id>3;
+SELECT * FROM belkniga.Cars WHERE Load_capacity=700;
+SELECT * FROM belkniga.Shops WHERE Cities_id=5; 
